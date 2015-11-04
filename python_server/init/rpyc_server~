@@ -4,10 +4,10 @@
 
 case "$1" in
   start)
-    /bin/rpyc_server
+    /bin/rpyc_server.py
     ;;
   stop)
-    kilall -ev rpyc_server
+    
     ;;
   *)
     echo "Usage: /etc/init.d/rpyc_server {start|stop}"
