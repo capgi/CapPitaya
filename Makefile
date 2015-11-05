@@ -409,11 +409,12 @@ CALIB_DIR       = Test/calib
 CALIBRATE_DIR   = Test/calibrate
 COMM_DIR        = Examples/Communication/C
 XADC_DIR        = Test/xadc
+PYTHONSERVER_DIR = python_server
 
 .PHONY: examples rp_communication
-.PHONY: lcr bode monitor generate acquire calib calibrate
+.PHONY: lcr bode monitor generate acquire calib calibrate python_server
 
-examples: lcr bode monitor generate acquire calib
+examples: lcr bode monitor generate acquire calib python_server
 # calibrate
 
 lcr:
@@ -440,12 +441,18 @@ calib:
 	$(MAKE) -C $(CALIB_DIR)
 	$(MAKE) -C $(CALIB_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))
 
+# python server files copy
+python_server:
+	$(MAKE) -C $(PYTHONSERVER_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))
+
 calibrate: api
 	$(MAKE) -C $(CALIBRATE_DIR)
 	$(MAKE) -C $(CALIBRATE_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))
 
 rp_communication:
 	make -C $(COMM_DIR)
+
+
 
 #xadc: $(LINUX_DIR)
 #	$(MAKE) -C $(XADC_DIR)
@@ -521,6 +528,8 @@ clean:
 	make -C shared clean
 	# todo, remove downloaded libraries and symlinks
 	rm -rf Bazaar/tools/cryptopp
+	rm -rf Bazaar/tools/libjson
+	rm -rf Bazaar/tools/build
 	make -C $(NGINX_DIR) clean
 	make -C $(MONITOR_DIR) clean
 	make -C $(GENERATE_DIR) clean
