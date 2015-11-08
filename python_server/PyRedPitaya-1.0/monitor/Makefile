@@ -40,7 +40,7 @@ SHARED=shared/
 LIBS=-lm -lpthread
 
 # Main GCC executable (used for compiling and linking)
-# CC=$(CROSSBASE)gcc
+CC=$(CROSS_COMPILE)gcc
 # Installation directory
 INSTALL_DIR ?= .
 
@@ -84,7 +84,7 @@ version.h:
 	cp $(SHARED)/include/redpitaya/version.h . 
 
 # Clean target - when called it cleans all object files and executables.
-clean:
+clean: 
 	rm -f $(TARGETLIB) *.o *.os
 
 # Install target - creates 'bin/' sub-directory in $(INSTALL_DIR) and copies all
