@@ -16,6 +16,11 @@ install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_nginx.service
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_scpi.service      $ROOT_DIR/etc/systemd/system/redpitaya_scpi.service
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_heartbeat.service $ROOT_DIR/etc/systemd/system/redpitaya_heartbeat.service
 install -v -m 664 -o root -D $OVERLAY/etc/sysconfig/redpitaya                        $ROOT_DIR/etc/sysconfig/redpitaya
+# JMC Add autostart RedPitaya python_server
+install -v -m 754 -o root -D $OVERLAY/bin/rpyc_server		                     $ROOT_DIR/bin/rpyc_server
+install -v -m 754 -o root -D $OVERLAY/etc/init.d/python_server                       $ROOT_DIR/etc/init.d/python_server
+install -v -m 754 -o root -D $OVERLAY/usr/local/lib/libmonitor.so                    $ROOT_DIR/usr/local/lib/libmonitor.so
+
 # TODO: this Wyliodrin service is only here since wyliodrin.sh can not be run in a virtualized environment
 # Wyliodrin service
 install -v -m 664 -o root -D $OVERLAY/etc/systemd/system/redpitaya_wyliodrin.service $ROOT_DIR/etc/systemd/system/redpitaya_wyliodrin.service
@@ -28,6 +33,12 @@ systemctl enable redpitaya_heartbeat
 
 apt-get -y install libluajit-5.1 lua-cjson unzip
 apt-get -y install libboost-system1.55.0 libboost-regex1.55.0 libboost-thread1.55.0
+
+# JMC : Add Python, pip, numpy, PyRedPitaya
+apt-get -y install python python-dev python-pip python-numpy
+pip install PyRedPitaya
+# config RedPitaya Python server autostart
+update-rc.d python_server defaults
 EOF_CHROOT
 
 # profile for PATH variables, ...
