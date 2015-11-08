@@ -23,14 +23,22 @@ INITFILE = python_server
 # Example dir
 EXAMPLE_DIR = Examples
 
+# Monitor directory
+MONITOR_DIR = PyRedPitaya-1.0/monitor
+
+.PHONY monitor:
+	$(MAKE) -C $(MONITOR_DIR)
+	$(MAKE) -C $(MONITOR_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))/usr/local/
 # Install target - copy files to  in $(INSTALL_DIR) 
 # executables to that location.
-install:
+install: monitor
 	mkdir -p $(INSTALL_DIR)/bin
 	cp bin/$(APPFILE) $(INSTALL_DIR)/bin
-	mkdir -p $(INSTALL_DIR)/src
-	cp -r $(EXAMPLE_DIR) $(INSTALL_DIR)/src
+	mkdir -p $(INSTALL_DIR)/opt/src
+	cp -r $(EXAMPLE_DIR) $(INSTALL_DIR)/opt/src
 	mkdir -p $(INSTALL_DIR)/etc/init.d/
 	cp -r init/$(INITFILE) $(INSTALL_DIR)/etc/init.d/
 
-# NOTE : registering init file in OS/debian/redpitaya.sh
+# NOTE : registering init file by OS/debian/redpitaya.sh
+clean:
+	$(MAKE) -C $(MONITOR_DIR) clean
