@@ -133,7 +133,7 @@ $(TMP):
 
 $(TARGET): $(BOOT_UBOOT) u-boot $(DEVICETREE) $(LINUX) buildroot $(IDGEN) $(NGINX) \
 	   examples $(DISCOVERY) $(HEARTBEAT) ecosystem \
-	   scpi api apps_pro rp_communication
+	   scpi api apps_pro rp_communication python_server
 	mkdir -p               $(TARGET)
 	# copy boot images and select FSBL as default
 	cp $(BOOT_UBOOT)       $(TARGET)/boot.bin
@@ -412,9 +412,9 @@ XADC_DIR        = Test/xadc
 PYTHONSERVER_DIR = python_server
 
 .PHONY: examples rp_communication
-.PHONY: lcr bode monitor generate acquire calib calibrate python_server
+.PHONY: lcr bode monitor generate acquire calib calibrate 
 
-examples: lcr bode monitor generate acquire calib python_server
+examples: lcr bode monitor generate acquire calib
 # calibrate
 
 lcr:
@@ -441,10 +441,6 @@ calib:
 	$(MAKE) -C $(CALIB_DIR)
 	$(MAKE) -C $(CALIB_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))
 
-# python server files copy
-python_server:
-	$(MAKE) -C $(PYTHONSERVER_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))
-
 calibrate: api
 	$(MAKE) -C $(CALIBRATE_DIR)
 	$(MAKE) -C $(CALIBRATE_DIR) install INSTALL_DIR=$(abspath $(INSTALL_DIR))
@@ -467,6 +463,11 @@ $(DISCOVERY):
 
 $(HEARTBEAT):
 	cp $(OS_TOOLS_DIR)/heartbeat.sh $@
+
+# python server files copy
+.PHONY: python_server
+python_server:
+	$(MAKE) -C $(PYTHONSERVER_DIR) install INSTALL_DIR=$(abspath OS/debian/overlay)
 
 ################################################################################
 # Red Pitaya ecosystem and free applications
